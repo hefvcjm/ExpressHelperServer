@@ -24,38 +24,27 @@
  * <http://www.apache.org/>.
  *
  */
-package Net;
+package test;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
-import javax.net.ssl.SSLContext;
-
-import org.apache.http.ExceptionLogger;
-import org.apache.http.HttpConnection;
-import org.apache.http.HttpException;
-import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.MethodNotSupportedException;
+import org.apache.http.*;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.nio.bootstrap.HttpServer;
 import org.apache.http.impl.nio.bootstrap.ServerBootstrap;
 import org.apache.http.impl.nio.reactor.IOReactorConfig;
 import org.apache.http.nio.entity.NFileEntity;
 import org.apache.http.nio.entity.NStringEntity;
-import org.apache.http.nio.protocol.BasicAsyncRequestConsumer;
-import org.apache.http.nio.protocol.BasicAsyncResponseProducer;
-import org.apache.http.nio.protocol.HttpAsyncExchange;
-import org.apache.http.nio.protocol.HttpAsyncRequestConsumer;
-import org.apache.http.nio.protocol.HttpAsyncRequestHandler;
+import org.apache.http.nio.protocol.*;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.ssl.SSLContexts;
+
+import javax.net.ssl.SSLContext;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Embedded HTTP/1.1 file server based on a non-blocking I/O model and capable of direct channel

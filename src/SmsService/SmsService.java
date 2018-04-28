@@ -107,7 +107,7 @@ public class SmsService {
     public static void main(String[] args) throws ClientException, InterruptedException {
 
         //发短信
-        String phone = "15802918993";
+        String phone = "158029189930";
         String code = "086714";
         SendSmsResponse response = sendSms(phone, code);
         System.out.println("短信接口返回的数据----------------");
