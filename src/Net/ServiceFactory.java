@@ -1,6 +1,7 @@
 package Net;
 
 import Net.Service.LoginService;
+import Net.Service.VcodeService;
 
 import java.util.Locale;
 
@@ -18,8 +19,9 @@ public class ServiceFactory {
         if (type.toUpperCase(Locale.ROOT).equals("LOGIN")) {
             return new LoginService();
         }
-
-
+        if (type.toUpperCase(Locale.ROOT).equals("VCODE")) {
+            return new VcodeService();
+        }
         return null;
     }
 }

@@ -8,13 +8,16 @@ import java.util.*;
 public class VcodeManage {
     //保存登录手机号-验证码对
     private static Map<String, String> codeMap;
+    //手机号与定时器对
+    private static Map<String, Timer> timerMap;
     //定时时长
-    private final static long TIME_LENGTH = 5 * 1000L;
+    private final static long TIME_LENGTH = 60 * 1000L;
 
     private volatile static VcodeManage instance;
 
     private VcodeManage() {
         codeMap = new HashMap<>();
+        timerMap = new HashMap<>();
     }
 
     /**
@@ -56,6 +59,7 @@ public class VcodeManage {
         if (!codeMap.containsKey(phone)) {
             return;
         }
+        cancelTimer(phone);
         codeMap.remove(phone);
     }
 
@@ -101,11 +105,32 @@ public class VcodeManage {
         long ms = System.currentTimeMillis();
         Date time = new Date(ms + TIME_LENGTH);
         Timer timer = new Timer();
+        if (!timerMap.containsKey(phone)) {
+            timerMap.put(phone, timer);
+        } else {
+            timerMap.replace(phone, timer);
+        }
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                remove(phone);
+                if (!codeMap.containsKey(phone)) {
+                    return;
+                }
+                codeMap.remove(phone);
             }
         }, time);
+    }
+
+    /**
+     * 删除phone关联的schedule任务
+     *
+     * @param phone 手机号码
+     */
+    private synchronized void cancelTimer(String phone) {
+        if (!timerMap.containsKey(phone)) {
+            return;
+        }
+        timerMap.get(phone).cancel();
+        timerMap.remove(phone);
     }
 }

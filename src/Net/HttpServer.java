@@ -74,14 +74,12 @@ public class HttpServer {
             String target = request.getRequestLine().getUri();
             System.out.println(request.getRequestLine().toString());
             Header type = request.getFirstHeader("type");
-            System.out.println("w:" + type);
             String requestType;
             if (type != null) {
                 CharArrayBuffer buf = new CharArrayBuffer(type.toString().length());
                 buf.append(type.toString());
                 int i = buf.indexOf(':');
                 requestType = buf.substringTrimmed(i + 1, buf.length());
-                System.out.println("n:" + requestType);
             } else {
                 requestType = null;
             }

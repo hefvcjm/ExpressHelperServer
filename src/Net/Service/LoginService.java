@@ -14,7 +14,7 @@ public class LoginService implements RequestService {
             String code = json.getString("code");
             if (VcodeManage.getInstance().check(phone, code)) {
                 System.out.println("登录成功！");
-
+                VcodeManage.getInstance().remove(phone);
                 return "{\"msg\"" + ":" + "\"登录成功！\"}";
             }
         } catch (JSONException je) {
@@ -22,11 +22,6 @@ public class LoginService implements RequestService {
             return null;
         }
         System.out.println("验证码无效！");
-        return null;
-    }
-
-    private String verify(String phone, String code) {
-
         return null;
     }
 }
