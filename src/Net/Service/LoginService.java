@@ -5,6 +5,9 @@ import SmsService.VcodeManage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * 验证登录服务
+ */
 public class LoginService implements RequestService {
     @Override
     public String handleRequest(String content) {

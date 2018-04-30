@@ -11,6 +11,9 @@ import org.json.JSONObject;
 import java.util.Locale;
 import java.util.Random;
 
+/**
+ * 获取验证码服务
+ */
 public class VcodeService implements RequestService {
     @Override
     public String handleRequest(String content) {
