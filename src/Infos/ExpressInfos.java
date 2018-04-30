@@ -12,7 +12,7 @@ import java.util.Set;
  * 用于管理物流信息的类
  */
 public class ExpressInfos {
-    private enum State {
+    public enum State {
         WAITING_FOR_PICKING_UP("待取货"), FINISHING_PICKING_UP("已领取"), DELAY_PICKING_UP("已延期"), REFUSE_PICKING_UP("已拒收"), EXPIRE_PICKING_UP("已过期");
         private String name;
 
@@ -25,6 +25,9 @@ public class ExpressInfos {
         }
     }
 
+    private String barcode = "";//条形码
+    private String phone = "";//收货人手机号码
+    private String name = "";//收货人姓名
     private String company = "";//快递公司
     private String location = "";//取货地点
     private String code = "";//取货码
@@ -51,6 +54,32 @@ public class ExpressInfos {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    public String getBarcode() {
+        return barcode;
+    }
+
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
     public String getCompany() {
@@ -94,8 +123,10 @@ public class ExpressInfos {
     }
 
     public String toString() {
-        String str = "{\"company\":\"" + getCompany() + "\"," + "\"location\":\"" + getLocation() + "\"," + "\"code\":\"" + getCode() + "\"," + "\"deadline\":\"" + getDeadline() + "\"," + "\"state\":\"" + getState() + "\"}";
-        ;
+        String str = "{" + "\"barcode\":\"" + getBarcode() + "\"," + "\"phone\":\"" + getPhone() + "\","
+                + "\"name\":\"" + getName() + "\"," + "\"company\":\"" + getCompany() + "\","
+                + "\"location\":\"" + getLocation() + "\"," + "\"code\":\"" + getCode() + "\","
+                + "\"deadline\":\"" + getDeadline() + "\"," + "\"state\":\"" + getState() + "\"}";
         return str;
     }
 

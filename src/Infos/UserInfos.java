@@ -17,6 +17,7 @@ public class UserInfos {
     private String name = "";//用户名
     private String email = "";//邮箱
     private String password = "";//密码
+    private String lastlogin = "";//最近一次登录时间
 
     public UserInfos(String json) {
         try {
@@ -72,8 +73,18 @@ public class UserInfos {
         this.password = password;
     }
 
+    public String getLastlogin() {
+        return lastlogin;
+    }
+
+    public void setLastlogin(String lastlogin) {
+        this.lastlogin = lastlogin;
+    }
+
     public String toString() {
-        String str = "{\"phone\":\"" + getPhone() + "\"," + "\"name\":\"" + getName() + "\"," + "\"email\":\"" + getEmail() + "\"," + "\"password\":\"" + getPassword() + "\"}";
+        String str = "{\"phone\":\"" + getPhone() + "\"," + "\"name\":\"" + getName() + "\","
+                + "\"email\":\"" + getEmail() + "\"," + "\"password\":\"" + getPassword() + "\","
+                + "\"lastlogin\":\"" + getLastlogin() + "\"}";
         return str;
     }
 
