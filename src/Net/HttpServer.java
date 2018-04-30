@@ -42,7 +42,7 @@ public class HttpServer {
 
         final org.apache.http.impl.bootstrap.HttpServer server = ServerBootstrap.bootstrap()
                 .setListenerPort(port)
-                .setServerInfo("Test/1.1")
+                .setServerInfo("HTTP/1.1")
                 .setSocketConfig(socketConfig)
 //                .setSslContext(sslContext)
                 .registerHandler("*", new MyHttpRequestHandler())
@@ -117,6 +117,11 @@ public class HttpServer {
                             ContentType.create("text/html", "UTF-8"));
                     response.setStatusCode(HttpStatus.SC_NOT_FOUND);
                     response.setEntity(responesEntity);
+                    System.out.println("response headers:");
+                    for (Header header : response.getAllHeaders()) {
+                        System.out.println(header.getName() + ":" + header.getValue());
+                    }
+                    System.out.println("response entities:" + EntityUtils.toString(response.getEntity()));
                 }
             } else if (method.equals("GET")) {
 
