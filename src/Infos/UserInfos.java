@@ -13,11 +13,25 @@ import java.util.Set;
  */
 public class UserInfos {
 
+    public enum State {
+        STATE_ONLINE("在线"), STATE_OFFLINE("下线"), STATE_LOGINED("已登录"), STATE_NOT_LOGIN("未登录"), STATE_UNKOWN("未知");
+        private String name;
+
+        private State(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
     private String phone = "";//手机号码
     private String name = "";//用户名
     private String email = "";//邮箱
     private String password = "";//密码
     private String lastlogin = "";//最近一次登录时间
+    private String state = "";//账号状态
 
     public UserInfos(String json) {
         try {
@@ -81,10 +95,18 @@ public class UserInfos {
         this.lastlogin = lastlogin;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public String toString() {
         String str = "{\"phone\":\"" + getPhone() + "\"," + "\"name\":\"" + getName() + "\","
                 + "\"email\":\"" + getEmail() + "\"," + "\"password\":\"" + getPassword() + "\","
-                + "\"lastlogin\":\"" + getLastlogin() + "\"}";
+                + "\"state\":\"" + getState() + "\"," + "\"lastlogin\":\"" + getLastlogin() + "\"}";
         return str;
     }
 

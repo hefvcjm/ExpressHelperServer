@@ -52,6 +52,7 @@ public class UsersDB {
         }
         sql = sql.substring(0, sql.length() - 1) + ") values " + format.substring(0, format.length() - 1) + ")";
         sql = String.format(sql, values.toArray());
+        System.out.println(sql);
         return sql;
     }
 
@@ -68,6 +69,7 @@ public class UsersDB {
     }
 
     public ResultSet query(String sql) {
+        System.out.println(sql);
         return usersDBM.query(sql);
     }
 

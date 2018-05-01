@@ -1,5 +1,6 @@
 package Net;
 
+import Net.Service.ExpressInfoService;
 import Net.Service.LoginService;
 import Net.Service.VcodeService;
 
@@ -25,7 +26,7 @@ public class ServiceFactory {
         }
         //查询快递信息服务
         if (type.toUpperCase(Locale.ROOT).equals("QUERY_EXPRESS_INFO")) {
-
+            return new ExpressInfoService();
         }
         return null;
     }
