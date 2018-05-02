@@ -33,34 +33,39 @@ public class ExpressInfoService implements RequestService {
             ResultSet state_sets = UsersDB.getInstance(DBManage.getInstance())
                     .query(String.format("select state from user_infos where phone=\"%s\"", phone));
             try {
-                state_sets.next();
-                String user_state = state_sets.getString(1);
-                if (user_state.equals(UserInfos.State.STATE_LOGINED.getName())
-                        || user_state.equals(UserInfos.State.STATE_ONLINE.getName())) {
-                    ResultSet sets = UsersDB.getInstance(DBManage.getInstance())
-                            .query(String.format("" +
-                                    "select barcode,company,location,code,deadline,state " +
-                                    "from express_infos " +
-                                    "where phone=\"%s\"", phone));
-                    int col = sets.getMetaData().getColumnCount();
-                    ResultSetMetaData rsd = sets.getMetaData();
-                    for (int i = 1; i <= col; i++) {
-                        System.out.println(rsd.getColumnName(i));
-                    }
-                    JSONObject rsp_json = new JSONObject();
-                    int k = 0;
-                    while (sets.next()) {
-                        k++;
-                        JSONObject js = new JSONObject();
-                        for (int i = 1; i <= col; i++) {
-                            js.put(rsd.getColumnName(i), sets.getString(i));
-                        }
-                        rsp_json.put("" + k, js.toString());
-                    }
-                    rsp_json.put("total", "" + k);
-                    return rsp_json.toString();
+                if (state_sets.getRow() == 0) {
+                    System.out.println(phone + " state:" + "用户尚未注册");
+                    return new JSONObject().put("msg", "用户尚未注册").toString();
                 } else {
-                    System.out.println(phone + " state:" + user_state);
+                    state_sets.next();
+                    String user_state = state_sets.getString(1);
+                    if (user_state.equals(UserInfos.State.STATE_LOGINED.getName())
+                            || user_state.equals(UserInfos.State.STATE_ONLINE.getName())) {
+                        ResultSet sets = UsersDB.getInstance(DBManage.getInstance())
+                                .query(String.format("" +
+                                        "select barcode,company,location,code,deadline,state " +
+                                        "from express_infos " +
+                                        "where phone=\"%s\"", phone));
+                        int col = sets.getMetaData().getColumnCount();
+                        ResultSetMetaData rsd = sets.getMetaData();
+                        for (int i = 1; i <= col; i++) {
+                            System.out.println(rsd.getColumnName(i));
+                        }
+                        JSONObject rsp_json = new JSONObject();
+                        int k = 0;
+                        while (sets.next()) {
+                            k++;
+                            JSONObject js = new JSONObject();
+                            for (int i = 1; i <= col; i++) {
+                                js.put(rsd.getColumnName(i), sets.getString(i));
+                            }
+                            rsp_json.put("" + k, js.toString());
+                        }
+                        rsp_json.put("total", "" + k);
+                        return rsp_json.toString();
+                    } else {
+                        System.out.println(phone + " state:" + user_state);
+                    }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
