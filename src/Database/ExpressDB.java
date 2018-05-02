@@ -55,15 +55,15 @@ public class ExpressDB {
         return sql;
     }
 
-    public int insert(ExpressInfos expressInfos) {
+    public boolean insert(ExpressInfos expressInfos) {
         return usersDBM.insert(insertSQL(expressInfos));
     }
 
-    public int update(String sql) {
+    public boolean update(String sql) {
         return usersDBM.update(sql);
     }
 
-    public int delete(String sql) {
+    public boolean delete(String sql) {
         return usersDBM.delete(sql);
     }
 

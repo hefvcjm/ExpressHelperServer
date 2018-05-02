@@ -9,6 +9,7 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -27,18 +28,29 @@ import java.util.Date;
 public class SmsService {
 
     //产品名称:云通信短信API产品,开发者无需替换
-    static final String product = "Dysmsapi";
+    private static final String product = "Dysmsapi";
     //产品域名,开发者无需替换
-    static final String domain = "dysmsapi.aliyuncs.com";
+    private static final String domain = "dysmsapi.aliyuncs.com";
 
     // TODO 此处需要替换成开发者自己的AK(在阿里云访问控制台寻找)
-    static final String accessKeyId = "LTAIIGFRSCOCv39i";
-    static final String accessKeySecret = "GdwlglsxZ0YYkK95Ynb65FYeL9jsBr";
+    private static final String accessKeyId = "LTAIIGFRSCOCv39i";
+    private static final String accessKeySecret = "GdwlglsxZ0YYkK95Ynb65FYeL9jsBr";
 
-    static final String signName = "物流助手";
-    static final String templateCode = "SMS_133975456";
+    private static final String signName = "物流助手";
 
-    public static SendSmsResponse sendSms(String phone, String code) throws ClientException {
+    //    static final String templateCode = "SMS_133975456";
+    //验证码模板
+    public static final String TEMPLATE_CODE = "SMS_133975456";
+    //到货信息模板
+    public static final String TEMPLATE_EXPRESS = "SMS_133972402";
+
+    //验证码：
+    //templateCode = "SMS_133975456";
+    //json={"code":"??????"}
+    //物流短信：
+    //templateCode = "SMS_133962278";
+    //json={"code":"????","company":"company_name","deadline":"deadline_info","location":"location_info"}
+    public static SendSmsResponse sendSms(String phone, String templateCode, String json) throws ClientException {
 
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
@@ -58,7 +70,7 @@ public class SmsService {
         //必填:短信模板-可在短信控制台中找到
         request.setTemplateCode(templateCode);
         //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
-        request.setTemplateParam("{\"code\":\"" + code + "\"}");
+        request.setTemplateParam(json);
 
         //选填-上行短信扩展码(无特殊需求用户请忽略此字段)
         //request.setSmsUpExtendCode("90997");
@@ -109,7 +121,7 @@ public class SmsService {
         //发短信
         String phone = "15802918993";
         String code = "086714";
-        SendSmsResponse response = sendSms(phone, code);
+        SendSmsResponse response = sendSms(phone, SmsService.TEMPLATE_CODE, new JSONObject().put("code", code).toString());
         System.out.println("短信接口返回的数据----------------");
         System.out.println("Code=" + response.getCode());
         System.out.println("Message=" + response.getMessage());

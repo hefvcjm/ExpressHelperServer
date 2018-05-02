@@ -33,11 +33,11 @@ public class ExpressInfoService implements RequestService {
             ResultSet state_sets = UsersDB.getInstance(DBManage.getInstance())
                     .query(String.format("select state from user_infos where phone=\"%s\"", phone));
             try {
-                if (state_sets.getRow() == 0) {
+                if (!state_sets.next()) {
                     System.out.println(phone + " state:" + "用户尚未注册");
                     return new JSONObject().put("msg", "用户尚未注册").toString();
                 } else {
-                    state_sets.next();
+//                    state_sets.next();
                     String user_state = state_sets.getString(1);
                     if (user_state.equals(UserInfos.State.STATE_LOGINED.getName())
                             || user_state.equals(UserInfos.State.STATE_ONLINE.getName())) {
@@ -89,8 +89,8 @@ public class ExpressInfoService implements RequestService {
             response.setStatusCode(HttpStatus.SC_OK);
             response.setEntity(responesEntity);
         } else {
-            responesEntity = new StringEntity("Error",
-                    ContentType.create("text/html", "UTF-8"));
+            responesEntity = new StringEntity(new JSONObject().put("msg","Error").toString(),
+                    ContentType.create("application/json", "UTF-8"));
             response.setStatusCode(HttpStatus.SC_NOT_FOUND);
             response.setEntity(responesEntity);
             System.out.println("response headers:");

@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * 更新物流信息，比如状态等
@@ -26,15 +27,24 @@ public class UpdateExpressService implements RequestService {
         try {
             JSONObject json = new JSONObject(content);
             String barcode = json.getString("barcode");
-            String state = json.getString("state");
-            ExpressDB.getInstance(DBManage.getInstance()).update(
-                    String.format("update express_infos set state = \"%s\" where barcode= \"%s\""
-                            , state, barcode));
-            return "{\"msg\"" + ":" + "\"物流信息更新成功！\"}";
+            String str = "";
+            Set<String> keys = json.keySet();
+            keys.remove("phone");
+            for (String key : keys) {
+                str += key + String.format("=\"%s\",", json.getString(key));
+            }
+            str = str.substring(0, str.length() - 1);//去掉最后一个逗号
+            if (str.length() != 0) {
+                ExpressDB.getInstance(DBManage.getInstance()).update(
+                        String.format("update express_infos set %s where barcode= \"%s\""
+                                , str, barcode));
+                return "{\"msg\"" + ":" + "\"物流信息更新成功！\"}";
+            }
         } catch (JSONException je) {
             je.printStackTrace();
             return null;
         }
+        return null;
     }
 
     @Override
@@ -48,8 +58,8 @@ public class UpdateExpressService implements RequestService {
             response.setStatusCode(HttpStatus.SC_OK);
             response.setEntity(responesEntity);
         } else {
-            responesEntity = new StringEntity("Error",
-                    ContentType.create("text/html", "UTF-8"));
+            responesEntity = new StringEntity(new JSONObject().put("msg","Error").toString(),
+                    ContentType.create("application/json", "UTF-8"));
             response.setStatusCode(HttpStatus.SC_NOT_FOUND);
             response.setEntity(responesEntity);
             System.out.println("response headers:");

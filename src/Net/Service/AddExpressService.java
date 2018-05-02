@@ -1,11 +1,11 @@
 package Net.Service;
 
 import Database.DBManage;
-import Database.UsersDB;
-import Infos.UserInfos;
+import Database.ExpressDB;
+import GenerateCode.PickupCode;
+import Infos.ExpressInfos;
 import Net.RequestService;
 import SmsService.SmsService;
-import SmsService.VcodeManage;
 import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
@@ -22,22 +22,44 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Random;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Set;
 
 /**
- * 获取验证码服务
+ * 快递助手新增快件服务
  */
-public class VcodeService implements RequestService {
+public class AddExpressService implements RequestService {
     @Override
     public Object handleRequest(String content) {
         try {
             JSONObject json = new JSONObject(content);
-            String phone = json.getString("phone");
-            String code = String.format("%06d", new Random().nextInt(999999));
+            Set<String> keys = json.keySet();
+            if (!keys.contains("phone") || !keys.contains("company") || !keys.contains("name") || !keys.contains("location")) {
+                System.out.println("添加快递信息不够");
+                return null;
+            }
+            for (String key : keys) {
+                if (!key.equals("phone") && !key.equals("company") && !key.equals("name") && !key.equals("location")) {
+                    json.remove(key);
+                }
+            }
+            Calendar ca = Calendar.getInstance();
+            ca.add(Calendar.DATE, 3);// num为增加的天数，可以改变的
+            Date date = ca.getTime();
+            json.put("deadline", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date))
+                    .put("barcode", PickupCode.getBarcode())
+                    .put("code", PickupCode.getCode())
+                    .put("state", ExpressInfos.State.WAITING_FOR_PICKING_UP.getName());
+            ExpressDB.getInstance(DBManage.getInstance()).insert(new ExpressInfos(json.toString()));
             try {
-                UsersDB.getInstance(DBManage.getInstance()).insert(new UserInfos(new JSONObject().put("phone", phone)
-                        .put("state", UserInfos.State.STATE_NOT_LOGIN.getName()).toString()));
-                SendSmsResponse response = SmsService.sendSms(phone, SmsService.TEMPLATE_CODE, new JSONObject().put("code", code).toString());
+                //json={"code":"????","company":"company_name","deadline":"deadline_info","location":"location_info"}
+                SendSmsResponse response = SmsService.sendSms(json.getString("phone"), SmsService.TEMPLATE_EXPRESS
+                        , new JSONObject().put("code", json.getString("code"))
+                                .put("company", json.getString("company"))
+                                .put("deadline", json.getString("deadline"))
+                                .put("location", json.getString("location")).toString());
                 String rspCode = response.getCode();
                 if (rspCode != null && rspCode.equals("OK")) {
                     System.out.println("rspCode:" + rspCode);
@@ -60,21 +82,20 @@ public class VcodeService implements RequestService {
                             System.out.println("Content=" + querySendDetailsResponse.getSmsSendDetailDTOs().get(0).getContent());
                         }
                     }).start();
-                    System.out.println("发送验证码成功！");
-                    VcodeManage.getInstance().remove(phone);
-                    VcodeManage.getInstance().add(phone, code);
-                    return "{\"msg\"" + ":" + "\"发送验证码成功！\"}";
+                    System.out.println("到货信息已发送给用户");
                 }
             } catch (ClientException e) {
                 e.printStackTrace();
+                System.out.println("到货信息已发送中出错");
                 return null;
             }
+            return "{\"msg\"" + ":" + "\"添加物流到货信息成功！\"}";
+
         } catch (JSONException je) {
             je.printStackTrace();
+            System.out.println("JSONException");
             return null;
         }
-        System.out.println("发送验证码出错！");
-        return null;
     }
 
     @Override
@@ -88,7 +109,8 @@ public class VcodeService implements RequestService {
             response.setStatusCode(HttpStatus.SC_OK);
             response.setEntity(responesEntity);
         } else {
-            responesEntity = new StringEntity(new JSONObject().put("msg","Error").toString(),
+            System.out.println("rsp==null");
+            responesEntity = new StringEntity(new JSONObject().put("msg", "Error").toString(),
                     ContentType.create("application/json", "UTF-8"));
             response.setStatusCode(HttpStatus.SC_NOT_FOUND);
             response.setEntity(responesEntity);

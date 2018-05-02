@@ -56,15 +56,15 @@ public class UsersDB {
         return sql;
     }
 
-    public int insert(UserInfos userInfos) {
+    public boolean insert(UserInfos userInfos) {
         return usersDBM.insert(insertSQL(userInfos));
     }
 
-    public int update(String sql) {
+    public boolean update(String sql) {
         return usersDBM.update(sql);
     }
 
-    public int delete(String sql) {
+    public boolean delete(String sql) {
         return usersDBM.delete(sql);
     }
 

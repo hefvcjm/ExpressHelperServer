@@ -3,11 +3,8 @@ package Net;
 import SmsService.VcodeManage;
 import org.apache.http.*;
 import org.apache.http.config.SocketConfig;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.bootstrap.ServerBootstrap;
 import org.apache.http.protocol.HttpContext;
-import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
@@ -93,7 +90,7 @@ public class HttpServer {
                 if (request instanceof HttpEntityEnclosingRequest) {
                     HttpEntity entity = ((HttpEntityEnclosingRequest) request).getEntity();
                     byte[] entityContent = EntityUtils.toByteArray(entity);
-                    content = new String(entityContent);
+                    content = new String(entityContent, "UTF-8");
                     System.out.println("content:" + content);
                 } else {
                     content = null;
@@ -107,7 +104,7 @@ public class HttpServer {
                     System.out.println("requestService == null");
                     rsp = null;
                 }
-                requestService.response(rsp,response,context);
+                requestService.response(rsp, response, context);
             } else if (method.equals("GET")) {
 
             } else if (method.equals("HEAD")) {

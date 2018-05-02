@@ -60,8 +60,8 @@ public class LoginService implements RequestService {
             response.setStatusCode(HttpStatus.SC_OK);
             response.setEntity(responesEntity);
         } else {
-            responesEntity = new StringEntity("Error",
-                    ContentType.create("text/html", "UTF-8"));
+            responesEntity = new StringEntity(new JSONObject().put("msg","Error").toString(),
+                    ContentType.create("application/json", "UTF-8"));
             response.setStatusCode(HttpStatus.SC_NOT_FOUND);
             response.setEntity(responesEntity);
             System.out.println("response headers:");

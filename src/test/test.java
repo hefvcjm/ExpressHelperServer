@@ -13,7 +13,7 @@ public class test {
         int n = 10;
         for (int i = 0; i < n; i++) {
             expressDB.insert(new ExpressInfos(new JSONObject()
-                    .put("phone", "15802918993")
+                    .put("phone", "15777498538")
                     .put("name", "hefvcjm")
                     .put("company", "顺丰快递")
                     .put("location", "西安交通大学西十五快递助手")

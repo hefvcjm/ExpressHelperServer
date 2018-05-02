@@ -111,29 +111,29 @@ public class DBManage {
         return resultSet;
     }
 
-    private int execute(String sql) {
-        int i = -1;
+    private boolean execute(String sql) {
+        boolean b = false;
         try {
-            i = stmt.executeUpdate(sql);
+            b = stmt.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return i;
+        return b;
     }
 
-    public int insert(String sql) {
+    public boolean insert(String sql) {
         return execute(sql);
     }
 
-    public int update(String sql) {
+    public boolean update(String sql) {
         return execute(sql);
     }
 
-    public int delete(String sql) {
+    public boolean delete(String sql) {
         return execute(sql);
     }
 
-    private int create(String sql) {
+    private boolean create(String sql) {
         return execute(sql);
     }
 

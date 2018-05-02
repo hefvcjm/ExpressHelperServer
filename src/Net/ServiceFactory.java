@@ -33,6 +33,10 @@ public class ServiceFactory {
         if (type.toUpperCase(Locale.ROOT).equals("UPDATE_EXPRESS")) {
             return new UpdateExpressService();
         }
+        //新到货信息
+        if (type.toUpperCase(Locale.ROOT).equals("ADD_NEW_EXPRESS")) {
+            return new AddExpressService();
+        }
         return null;
     }
 }
