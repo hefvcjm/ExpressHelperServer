@@ -1,10 +1,8 @@
 package Net.Service;
 
 import Database.DBManage;
-import Database.UsersDB;
-import Infos.UserInfos;
+import Database.ExpressDB;
 import Net.RequestService;
-import SmsService.VcodeManage;
 import org.apache.http.Header;
 import org.apache.http.HttpConnection;
 import org.apache.http.HttpResponse;
@@ -18,35 +16,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
- * 验证登录服务
+ * 更新物流信息，比如状态等
  */
-public class LoginService implements RequestService {
+public class UpdateExpressService implements RequestService {
     @Override
     public Object handleRequest(String content) {
         try {
             JSONObject json = new JSONObject(content);
-            String phone = json.getString("phone");
-            String code = json.getString("code");
-            if (VcodeManage.getInstance().check(phone, code)) {
-                System.out.println("登录成功！");
-                UsersDB.getInstance(DBManage.getInstance()).update(
-                        String.format("update user_infos set state = \"%s\",lastlogin=\"%s\" where phone= \"%s\""
-                                , UserInfos.State.STATE_LOGINED.getName()
-                                , new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date())
-                                , phone));
-                VcodeManage.getInstance().remove(phone);
-                return "{\"msg\"" + ":" + "\"登录成功！\"}";
-            }
+            String barcode = json.getString("barcode");
+            String state = json.getString("state");
+            ExpressDB.getInstance(DBManage.getInstance()).update(
+                    String.format("update express_infos set state = \"%s\" where barcode= \"%s\""
+                            , state, barcode));
+            return "{\"msg\"" + ":" + "\"物流信息更新成功！\"}";
         } catch (JSONException je) {
             je.printStackTrace();
             return null;
         }
-        System.out.println("验证码无效！");
-        return null;
     }
 
     @Override
@@ -75,6 +63,4 @@ public class LoginService implements RequestService {
             }
         }
     }
-
-
 }

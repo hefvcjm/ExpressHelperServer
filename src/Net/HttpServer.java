@@ -7,6 +7,7 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.bootstrap.ServerBootstrap;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.protocol.HttpCoreContext;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.apache.http.util.CharArrayBuffer;
 import org.apache.http.util.EntityUtils;
@@ -98,7 +99,7 @@ public class HttpServer {
                     content = null;
                 }
                 RequestService requestService = new ServiceFactory().getService(requestType);
-                String rsp;
+                Object rsp;
                 if (requestService != null) {
                     System.out.println("requestService != null");
                     rsp = requestService.handleRequest(content);
@@ -106,23 +107,7 @@ public class HttpServer {
                     System.out.println("requestService == null");
                     rsp = null;
                 }
-                StringEntity responesEntity;
-                if (rsp != null) {
-                    responesEntity = new StringEntity(rsp,
-                            ContentType.create("application/json", "UTF-8"));
-                    response.setStatusCode(HttpStatus.SC_OK);
-                    response.setEntity(responesEntity);
-                } else {
-                    responesEntity = new StringEntity("Error",
-                            ContentType.create("text/html", "UTF-8"));
-                    response.setStatusCode(HttpStatus.SC_NOT_FOUND);
-                    response.setEntity(responesEntity);
-                    System.out.println("response headers:");
-                    for (Header header : response.getAllHeaders()) {
-                        System.out.println(header.getName() + ":" + header.getValue());
-                    }
-                    System.out.println("response entities:" + EntityUtils.toString(response.getEntity()));
-                }
+                requestService.response(rsp,response,context);
             } else if (method.equals("GET")) {
 
             } else if (method.equals("HEAD")) {

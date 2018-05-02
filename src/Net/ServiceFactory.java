@@ -1,7 +1,6 @@
 package Net;
 
-import Net.Service.LoginService;
-import Net.Service.VcodeService;
+import Net.Service.*;
 
 import java.util.Locale;
 
@@ -25,7 +24,14 @@ public class ServiceFactory {
         }
         //查询快递信息服务
         if (type.toUpperCase(Locale.ROOT).equals("QUERY_EXPRESS_INFO")) {
-
+            return new ExpressInfoService();
+        }
+        //更新用户信息
+        if (type.toUpperCase(Locale.ROOT).equals("UPDATE_USER")) {
+            return new UpdateUserService();
+        }
+        if (type.toUpperCase(Locale.ROOT).equals("UPDATE_EXPRESS")) {
+            return new UpdateExpressService();
         }
         return null;
     }
