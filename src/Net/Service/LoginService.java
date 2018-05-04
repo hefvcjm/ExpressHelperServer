@@ -30,7 +30,7 @@ public class LoginService implements RequestService {
         try {
             JSONObject json = new JSONObject(content);
             String phone = json.getString("phone");
-            String code = json.getString("code");
+            String code = json.getString("vcode");
             if (VcodeManage.getInstance().check(phone, code)) {
                 System.out.println("登录成功！");
                 UsersDB.getInstance(DBManage.getInstance()).update(
@@ -40,13 +40,13 @@ public class LoginService implements RequestService {
                                 , phone));
                 VcodeManage.getInstance().remove(phone);
                 return "{\"msg\"" + ":" + "\"登录成功！\"}";
+            } else {
+                return "{\"msg\"" + ":" + "\"手机号与验证码不匹配\"}";
             }
         } catch (JSONException je) {
             je.printStackTrace();
             return null;
         }
-        System.out.println("验证码无效！");
-        return null;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class LoginService implements RequestService {
             response.setStatusCode(HttpStatus.SC_OK);
             response.setEntity(responesEntity);
         } else {
-            responesEntity = new StringEntity(new JSONObject().put("msg","Error").toString(),
+            responesEntity = new StringEntity(new JSONObject().put("msg", "Error").toString(),
                     ContentType.create("application/json", "UTF-8"));
             response.setStatusCode(HttpStatus.SC_NOT_FOUND);
             response.setEntity(responesEntity);

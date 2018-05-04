@@ -9,10 +9,6 @@ import org.jbarcode.util.ImageUtil;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * 产生条形码

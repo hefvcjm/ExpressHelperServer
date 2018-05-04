@@ -142,7 +142,7 @@ public class DBManage {
 //        dbManage.insert("insert into user_infos(phone,name) value(\"12345678902\",\"test1\")");
 //        dbManage.update("update user_infos set lastlogin=\"2017-01-01 00:00:00\"");
         try {
-            ResultSet sets = dbManage.query("select phone,name from user_infos");
+            ResultSet sets = dbManage.query("select * from express_infos");
             int col = sets.getMetaData().getColumnCount();
             ResultSetMetaData rsd = sets.getMetaData();
             for (int i = 1; i <= col; i++) {

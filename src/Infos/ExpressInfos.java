@@ -32,6 +32,8 @@ public class ExpressInfos {
     private String location = "";//取货地点
     private String code = "";//取货码
     private String deadline = "";//截止时间
+    private String arrivetime = "";//到货时间
+    private String pickuptime = "";//取货时间
     private String state = "";//状态
 
     public ExpressInfos(String json) {
@@ -114,6 +116,22 @@ public class ExpressInfos {
         this.deadline = deadline;
     }
 
+    public String getPickuptime() {
+        return pickuptime;
+    }
+
+    public void setPickuptime(String pickuptime) {
+        this.pickuptime = pickuptime;
+    }
+
+    public String getArrivetime() {
+        return arrivetime;
+    }
+
+    public void setArrivetime(String arrivetime) {
+        this.arrivetime = arrivetime;
+    }
+
     public String getState() {
         return state;
     }
@@ -126,6 +144,7 @@ public class ExpressInfos {
         String str = "{" + "\"barcode\":\"" + getBarcode() + "\"," + "\"phone\":\"" + getPhone() + "\","
                 + "\"name\":\"" + getName() + "\"," + "\"company\":\"" + getCompany() + "\","
                 + "\"location\":\"" + getLocation() + "\"," + "\"code\":\"" + getCode() + "\","
+                + "\"," + "\"arrivetime\":\"" + getArrivetime() + "\"," + "\"pickuptime\":\"" + getPickuptime() + "\","
                 + "\"deadline\":\"" + getDeadline() + "\"," + "\"state\":\"" + getState() + "\"}";
         return str;
     }

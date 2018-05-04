@@ -48,7 +48,7 @@ public class AddExpressService implements RequestService {
             Calendar ca = Calendar.getInstance();
             ca.add(Calendar.DATE, 3);// num为增加的天数，可以改变的
             Date date = ca.getTime();
-            json.put("deadline", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date))
+            json.put("deadline", new SimpleDateFormat("yyyy-MM-dd").format(date) + " 00:00:00")
                     .put("barcode", PickupCode.getBarcode())
                     .put("code", PickupCode.getCode())
                     .put("state", ExpressInfos.State.WAITING_FOR_PICKING_UP.getName());
@@ -57,6 +57,7 @@ public class AddExpressService implements RequestService {
                 //json={"code":"????","company":"company_name","deadline":"deadline_info","location":"location_info"}
                 SendSmsResponse response = SmsService.sendSms(json.getString("phone"), SmsService.TEMPLATE_EXPRESS
                         , new JSONObject().put("code", json.getString("code"))
+                                .put("arrivetime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date))
                                 .put("company", json.getString("company"))
                                 .put("deadline", json.getString("deadline"))
                                 .put("location", json.getString("location")).toString());

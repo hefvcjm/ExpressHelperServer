@@ -74,7 +74,7 @@ public class VcodeService implements RequestService {
             return null;
         }
         System.out.println("发送验证码出错！");
-        return null;
+        return "{\"msg\"" + ":" + "\"发送验证码出错！\"}";
     }
 
     @Override

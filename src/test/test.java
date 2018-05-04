@@ -17,6 +17,7 @@ public class test {
                     .put("name", "hefvcjm")
                     .put("company", "顺丰快递")
                     .put("location", "西安交通大学西十五快递助手")
+                    .put("arrivetime", "2018-04-27 15:30:2")
                     .put("deadline", "2018-05-01 00:00:00")
                     .put("state", "待取货")
                     .put("code", PickupCode.getCode())
